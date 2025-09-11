@@ -1,0 +1,52 @@
+﻿
+using clinic.DAL.Enum;
+
+
+namespace clinic.DAL.Entities
+{
+    public class Person
+    {
+        public int Id { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? NationalID { get; set; }
+        public int Age { get; set; }
+        public DateTime BirthDate { get; set; }
+        public string? Gender { get; set; }
+        public string? Address { get; set; }
+        public string? Phone { get; set; }
+        public string? Email { get; set; }
+        public string? imgPath { get;  set; }
+        public string? CreatedBy { get;  set; }
+        public DateTime CreatedOn { get;  set; }
+        public bool? isDeleted { get;  set; }
+        public DateTime? DeletedOn { get;  set; }
+        public string? ModifiedBy { get; set; }
+        public DateTime? ModifiedOn { get; set; }
+        public bool Update(string fname,string lname, string nationalID,string email,
+            string phone,string address, int age, DateTime birthDate, string modifiedBy)
+        {
+            if (string.IsNullOrEmpty(modifiedBy))
+                return false;
+            FirstName = fname;
+            LastName = lname;
+            NationalID = nationalID;
+            Age = age;
+            BirthDate = birthDate;
+            Address = address;
+            Phone = phone;
+            Email = email;
+            ModifiedBy = modifiedBy;
+            ModifiedOn = DateTime.Now;
+            return true;
+        }
+        public bool ToggleStatus(string DeletedPerson)
+        {
+            if (string.IsNullOrEmpty(DeletedPerson))
+                return false;
+            isDeleted = !isDeleted;
+            DeletedOn = DateTime.Now;
+            return true;
+        }
+    }
+}
