@@ -26,23 +26,33 @@ namespace clinic.DAL.Repo.implementation
             }
         }
 
-        public async Task<bool> DeletedAsync(int DoctorId)
+        public async Task<bool> DeletedAsync(int doctorId)
         {
             try
             {
-                var result = await Db.Doctors
-                                     .Where(a => a.Id == DoctorId)
-                                     .FirstOrDefaultAsync();
+                var doctor = await Db.Doctors
+                    .Include(d => d.Person)
+                    .Include(d => d.User)
+                    .FirstOrDefaultAsync(d => d.Id == doctorId);
 
-                if (result != null)
+                if (doctor != null)
                 {
-                    var r = result.Person.ToggleStatus(result.Person.FirstName);
-                    if (r)
+                    if (doctor.User != null)
                     {
-                        await Db.SaveChangesAsync();
-                        return true;
+                        Db.Users.Remove(doctor.User);
                     }
+
+                    if (doctor.Person != null)
+                    {
+                        Db.Person.Remove(doctor.Person);
+                    }
+
+                    Db.Doctors.Remove(doctor);
+
+                    await Db.SaveChangesAsync();
+                    return true;
                 }
+
                 return false;
             }
             catch (Exception)
@@ -50,6 +60,7 @@ namespace clinic.DAL.Repo.implementation
                 throw;
             }
         }
+
 
         public async Task<bool> EditAsync(Doctor doctor)
         {
@@ -99,7 +110,7 @@ namespace clinic.DAL.Repo.implementation
             {
                 throw;
             }
-        }
+         }
 
         public async Task<List<Doctor>> GetDoctorsAsync(Expression<Func<Doctor, bool>>? filter = null)
         {

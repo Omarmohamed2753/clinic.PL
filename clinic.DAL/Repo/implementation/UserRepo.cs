@@ -26,18 +26,34 @@ namespace clinic.DAL.Repo.implementation
             }
         }
 
-        public async Task<bool> DeleteAsync(User user, string deletedBy = "system")
+        public async Task<bool> DeletedAsync(int userId)
         {
-            if (user == null) return false;
-
-            _db.Users.Remove(user);
-
-            if (user.Person.ToggleStatus(deletedBy))
+            try
             {
-                return await _db.SaveChangesAsync() > 0;
-            }
+                var user = await _db.Users
+                    .Include(d => d.Person)
+                    .FirstOrDefaultAsync(d => d.Id == userId.ToString());
 
-            return false;
+                if (user != null)
+                {
+
+                    if (user.Person != null)
+                    {
+                        _db.Person.Remove(user.Person);
+                    }
+
+                    _db.Users.Remove(user);
+
+                    await _db.SaveChangesAsync();
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<bool> EditAsync(User user, string updatedBy = "system")

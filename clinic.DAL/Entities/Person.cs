@@ -19,15 +19,14 @@ namespace clinic.DAL.Entities
         public string? imgPath { get;  set; }
         public string? CreatedBy { get;  set; }
         public DateTime CreatedOn { get;  set; }
-        public bool? isDeleted { get;  set; }
-        public DateTime? DeletedOn { get;  set; }
-        public string? ModifiedBy { get; set; }
+        public string? ModifiedBy { get; set; } 
         public DateTime? ModifiedOn { get; set; }
         public bool Update(string fname,string lname, string nationalID,string email,
-            string phone,string address, int age, DateTime birthDate, string modifiedBy)
+            string phone,string address, int age, DateTime birthDate, string modifiedBy="Admin")
         {
             if (string.IsNullOrEmpty(modifiedBy))
-                return false;
+                modifiedBy = "Admin";
+
             FirstName = fname;
             LastName = lname;
             NationalID = nationalID;
@@ -40,13 +39,6 @@ namespace clinic.DAL.Entities
             ModifiedOn = DateTime.Now;
             return true;
         }
-        public bool ToggleStatus(string DeletedPerson)
-        {
-            if (string.IsNullOrEmpty(DeletedPerson))
-                return false;
-            isDeleted = !isDeleted;
-            DeletedOn = DateTime.Now;
-            return true;
-        }
+      
     }
 }

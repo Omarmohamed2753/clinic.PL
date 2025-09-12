@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using clinic.DAL.DataBase;
 using clinic.BLL.Service.implementation;
+using clinic.BLL.ModelVM.User;
 
 namespace clinic.PL.Controllers
 {
@@ -148,5 +149,55 @@ namespace clinic.PL.Controllers
 
             return View(mapped);
         }
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var (isError, errorMessage, doctor) = await _doctorService.GetDoctorForEditAsync(id);
+            if (isError || doctor == null)
+            {
+                TempData["ErrorMessage"] = errorMessage ?? "Doctor not found";
+                return RedirectToAction("Doctors");
+            }
+
+            return View(doctor);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditDoctorVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var (success, errorMessage) = await _doctorService.EditAsync(model);
+
+            if (!success)
+            {
+                ModelState.AddModelError("", errorMessage ?? "Something went wrong while updating doctor");
+                return View(model);
+            }
+
+            TempData["SuccessMessage"] = "Doctor updated successfully!";
+            return RedirectToAction("Doctors");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _doctorService.DeleteAsync(id);
+
+            if (!result.success)
+            {
+                TempData["ErrorMessage"] = result.errorMessage ?? "Failed to delete doctor.";
+                return RedirectToAction("Index");
+            }
+
+            TempData["SuccessMessage"] = "Doctor deleted successfully.";
+            return RedirectToAction("Index"); 
+        }
+
+
     }
 }

@@ -27,6 +27,9 @@ namespace clinic.DAL.Entities
             // Navigation Properties
             public virtual Person Person { get; set; }
             public virtual List<Appointment> Appointments { get; set; }
+            [ForeignKey("User")]
+            public string UserId { get; set; }
+            public virtual User User { get; set; }
             
 
     }

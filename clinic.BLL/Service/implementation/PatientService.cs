@@ -31,7 +31,7 @@ namespace clinic.BLL.Service.implementation
             if (patient == null)
                 return (false, "Patient not found");
 
-            bool deleted = await _patientRepo.DeleteAsync(patient);
+            bool deleted = await _patientRepo.DeletedAsync(patient.Id);
             return deleted ? (true, null) : (false, "Failed to delete patient");
         }
 

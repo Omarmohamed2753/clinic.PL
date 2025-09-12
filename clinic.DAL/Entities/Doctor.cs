@@ -34,6 +34,14 @@ namespace clinic.DAL.Entities
         [ForeignKey("User")]
         public string UserID { get; set; }
         public virtual User User { get; set; }
+        public void UpdateDoctor(string licenseNumber, string specialization, int yearsOfExperience, string imgPath)
+        {
+            LicenseNumber = licenseNumber;
+            Specialization = specialization;
+            YearsOfExperience = yearsOfExperience;
+            this.imgPath = imgPath;
+        }
+
 
 
     }

@@ -1,5 +1,7 @@
-﻿using clinic.DAL.DataBase;
+﻿using clinic.BLL.ModelVM.User;
+using clinic.DAL.DataBase;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace clinic.BLL.Service.implementation
 {
@@ -137,6 +139,7 @@ namespace clinic.BLL.Service.implementation
             if (existingDoctor == null)
                 return (false, "Doctor not found");
 
+            // معالجة الصورة
             string newImageUrl = existingDoctor.Person.imgPath;
             if (DoctorVM.DoctorImg != null)
             {
@@ -152,12 +155,66 @@ namespace clinic.BLL.Service.implementation
                 newImageUrl = Upload.UploadFile("Files", DoctorVM.DoctorImg);
             }
 
-            mapper.Map(DoctorVM, existingDoctor);
+            // تحديث بيانات Person
+            existingDoctor.Person.FirstName = DoctorVM.FirstName;
+            existingDoctor.Person.LastName = DoctorVM.LastName;
+            existingDoctor.Person.Email = DoctorVM.User.Email;
+            existingDoctor.Person.Phone = DoctorVM.Phone;
+            existingDoctor.Person.Address = DoctorVM.Address;
+            existingDoctor.Person.Age = DoctorVM.Age;
+            existingDoctor.Person.BirthDate = DoctorVM.BirthDate;
             existingDoctor.Person.imgPath = newImageUrl;
+
+            // تحديث بيانات User
+            existingDoctor.User.UserName = DoctorVM.User.UserName;
+            existingDoctor.User.Email = DoctorVM.User.Email;
+
+            // تحديث بيانات Doctor عن طريق الميثود
+            existingDoctor.UpdateDoctor(
+                DoctorVM.LicenseNumber,
+                DoctorVM.Specialization,
+                DoctorVM.YearsOfExperience,
+                newImageUrl
+            );
 
             bool updated = await DoctorRepo.EditAsync(existingDoctor);
             return updated ? (true, null) : (false, "Failed to update doctor");
         }
+
+        public async Task<(bool isError, string? errorMessage, EditDoctorVM? doctor)> GetDoctorForEditAsync(int id)
+        {
+            var doctor = await _dbContext.Doctors
+                .Include(d => d.Person)
+                .Include(d => d.User)
+                .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (doctor == null)
+                return (true, "Doctor not found", null);
+
+            var vm = new EditDoctorVM
+            {
+                Id = doctor.Id,
+                FirstName = doctor.Person.FirstName,
+                LastName = doctor.Person.LastName,
+                Phone = doctor.Person.Phone,
+                Address = doctor.Person.Address,
+                Age = doctor.Person.Age,
+                BirthDate = doctor.Person.BirthDate,
+                LicenseNumber = doctor.LicenseNumber,
+                Specialization = doctor.Specialization,
+                YearsOfExperience = doctor.YearsOfExperience,
+                ExistingImgPath = doctor.imgPath,
+                User = new UserVM
+                {
+                    UserName = doctor.User.UserName,
+                    Email = doctor.User.Email
+                }
+            };
+
+            return (false, null, vm);
+        }
+
+
 
         public async Task<(bool success, string? errorMessage)> DeleteAsync(int id)
         {

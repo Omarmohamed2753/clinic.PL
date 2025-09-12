@@ -364,9 +364,15 @@ namespace clinic.DAL.Migrations
                     b.Property<int>("PersonID")
                         .HasColumnType("int");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PersonID");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Patients");
                 });
@@ -392,9 +398,6 @@ namespace clinic.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -423,9 +426,6 @@ namespace clinic.DAL.Migrations
 
                     b.Property<string>("imgPath")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("isDeleted")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -669,7 +669,15 @@ namespace clinic.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("clinic.DAL.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Person");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("clinic.DAL.Entities.Receptionist", b =>
