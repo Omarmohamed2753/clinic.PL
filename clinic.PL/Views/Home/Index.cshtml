@@ -1,10 +1,13 @@
-﻿<!-- Find A Doctor Section -->
+﻿@model IEnumerable<clinic.BLL.ModelVM.Doctor.GetAllDoctorVM>
+
+
+<!-- Find A Doctor Section -->
 <section id="find-a-doctor" class="find-a-doctor section">
 
   <!-- Section Title -->
   <div class="container section-title" data-aos="fade-up">
     <h2>Find A Doctor</h2>
-    <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+    <p>Search through our comprehensive directory of experienced medical professionals</p>
   </div><!-- End Section Title -->
 
   <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -13,23 +16,22 @@
       <div class="col-lg-8 text-center">
         <div class="search-section">
           <h3 class="search-title">Find Your Perfect Healthcare Provider</h3>
-          <p class="search-subtitle">Search through our comprehensive directory of experienced medical professionals</p>
-          <form class="search-form" action="forms/doctor-search.php" method="get">
+          <form class="search-form" asp-action="Index" method="get">
             <div class="search-input-group">
               <div class="input-wrapper">
                 <i class="bi bi-person"></i>
-                <input type="text" class="form-control" name="doctor_name" placeholder="Enter doctor name">
+                <input type="text" class="form-control" name="doctorName" placeholder="Enter doctor name">
               </div>
               <div class="select-wrapper">
                 <i class="bi bi-heart-pulse"></i>
                 <select class="form-select" name="specialty">
                   <option value="">All Specialties</option>
-                  <option value="cardiology">Cardiology</option>
-                  <option value="neurology">Neurology</option>
-                  <option value="orthopedics">Orthopedics</option>
-                  <option value="pediatrics">Pediatrics</option>
-                  <option value="dermatology">Dermatology</option>
-                  <option value="oncology">Oncology</option>
+                                    @* ممكن تجيب ليست التخصصات من DB وتعمل foreach هنا *@
+                  <option value="Cardiology">Cardiology</option>
+                  <option value="Neurology">Neurology</option>
+                  <option value="Orthopedics">Orthopedics</option>
+                  <option value="Pediatrics">Pediatrics</option>
+                  <option value="Dermatology">Dermatology</option>
                 </select>
               </div>
               <button type="submit" class="search-btn">
@@ -43,171 +45,44 @@
     </div>
 
     <div class="doctors-grid" data-aos="fade-up" data-aos-delay="300">
-      <div class="doctor-profile" data-aos="zoom-in" data-aos-delay="100">
-        <div class="profile-header">
-          <div class="doctor-avatar">
-            <img src="assets/img/health/staff-2.webp" alt="Dr. Amanda Foster" class="img-fluid">
-            <div class="status-indicator available"></div>
-          </div>
-          <div class="doctor-details">
-            <h4>Dr. Amanda Foster</h4>
-            <span class="specialty-tag">Cardiology Specialist</span>
-            <div class="experience-info">
-              <i class="bi bi-award"></i>
-              <span>14 years experience</span>
+            @foreach (var doctor in Model)
+            {
+            <div class="doctor-profile" data-aos="zoom-in" data-aos-delay="100">
+              <div class="profile-header">
+                <div class="doctor-avatar">
+                  <img src="~/files/@doctor.DoctorImgUrl" alt="@doctor.Name" class="img-fluid">
+                  <div class="status-indicator available"></div>
+                </div>
+                <div class="doctor-details">
+                  <h4>Dr. @doctor.Name</h4>
+                  <span class="specialty-tag">@doctor.Specialization</span>
+                  <div class="experience-info">
+                    <i class="bi bi-award"></i>
+                    <span>@doctor.YearsOfExperience years experience</span>
+                  </div>
+                </div>
+              </div>
+              <div class="rating-section">
+                <div class="stars">
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star"></i>
+                </div>
+                <span class="rating-score">4.8</span>
+                <span class="review-count">(89 reviews)</span>
+              </div>
+              <div class="action-buttons">
+                <a asp-controller="Doctor" asp-action="Details" asp-route-id="@doctor.Id" class="btn-secondary">View Details</a>
+                <a asp-controller="Appointment" asp-action="Book" asp-route-doctorId="@doctor.Id" class="btn-primary">Book Now</a>
+              </div>
             </div>
-          </div>
-        </div>
-        <div class="rating-section">
-          <div class="stars">
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-          </div>
-          <span class="rating-score">4.9</span>
-          <span class="review-count">(127 reviews)</span>
-        </div>
-        <div class="action-buttons">
-          <a href="#" class="btn-secondary">View Details</a>
-          <a href="#" class="btn-primary">Book Now</a>
-        </div>
-      </div><!-- End Doctor Profile -->
-
-      <div class="doctor-profile" data-aos="zoom-in" data-aos-delay="200">
-        <div class="profile-header">
-          <div class="doctor-avatar">
-            <img src="assets/img/health/staff-6.webp" alt="Dr. Marcus Johnson" class="img-fluid">
-            <div class="status-indicator busy"></div>
-          </div>
-          <div class="doctor-details">
-            <h4>Dr. Marcus Johnson</h4>
-            <span class="specialty-tag">Neurology Expert</span>
-            <div class="experience-info">
-              <i class="bi bi-award"></i>
-              <span>16 years experience</span>
-            </div>
-          </div>
-        </div>
-        <div class="rating-section">
-          <div class="stars">
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-half"></i>
-          </div>
-          <span class="rating-score">4.8</span>
-          <span class="review-count">(89 reviews)</span>
-        </div>
-        <div class="action-buttons">
-          <a href="#" class="btn-secondary">View Details</a>
-          <a href="#" class="btn-primary">Schedule</a>
-        </div>
-      </div><!-- End Doctor Profile -->
-
-      <div class="doctor-profile" data-aos="zoom-in" data-aos-delay="300">
-        <div class="profile-header">
-          <div class="doctor-avatar">
-            <img src="assets/img/health/staff-4.webp" alt="Dr. Rachel Williams" class="img-fluid">
-            <div class="status-indicator available"></div>
-          </div>
-          <div class="doctor-details">
-            <h4>Dr. Rachel Williams</h4>
-            <span class="specialty-tag">Pediatrics Care</span>
-            <div class="experience-info">
-              <i class="bi bi-award"></i>
-              <span>11 years experience</span>
-            </div>
-          </div>
-        </div>
-        <div class="rating-section">
-          <div class="stars">
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-          </div>
-          <span class="rating-score">5.0</span>
-          <span class="review-count">(203 reviews)</span>
-        </div>
-        <div class="action-buttons">
-          <a href="#" class="btn-secondary">View Details</a>
-          <a href="#" class="btn-primary">Book Now</a>
-        </div>
-      </div><!-- End Doctor Profile -->
-
-      <div class="doctor-profile" data-aos="zoom-in" data-aos-delay="400">
-        <div class="profile-header">
-          <div class="doctor-avatar">
-            <img src="assets/img/health/staff-8.webp" alt="Dr. David Chen" class="img-fluid">
-            <div class="status-indicator offline"></div>
-          </div>
-          <div class="doctor-details">
-            <h4>Dr. David Chen</h4>
-            <span class="specialty-tag">Orthopedic Surgery</span>
-            <div class="experience-info">
-              <i class="bi bi-award"></i>
-              <span>22 years experience</span>
-            </div>
-          </div>
-        </div>
-        <div class="rating-section">
-          <div class="stars">
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-half"></i>
-          </div>
-          <span class="rating-score">4.7</span>
-          <span class="review-count">(156 reviews)</span>
-        </div>
-        <div class="action-buttons">
-          <a href="#" class="btn-secondary">View Details</a>
-          <a href="#" class="btn-primary">Schedule</a>
-        </div>
-      </div><!-- End Doctor Profile -->
-
-      <div class="doctor-profile" data-aos="zoom-in" data-aos-delay="500">
-        <div class="profile-header">
-          <div class="doctor-avatar">
-            <img src="assets/img/health/staff-11.webp" alt="Dr. Victoria Torres" class="img-fluid">
-            <div class="status-indicator available"></div>
-          </div>
-          <div class="doctor-details">
-            <h4>Dr. Victoria Torres</h4>
-            <span class="specialty-tag">Dermatology Care</span>
-            <div class="experience-info">
-              <i class="bi bi-award"></i>
-              <span>9 years experience</span>
-            </div>
-          </div>
-        </div>
-        <div class="rating-section">
-          <div class="stars">
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star"></i>
-          </div>
-          <span class="rating-score">4.5</span>
-          <span class="review-count">(74 reviews)</span>
-        </div>
-        <div class="action-buttons">
-          <a href="#" class="btn-secondary">View Details</a>
-          <a href="#" class="btn-primary">Book Now</a>
-        </div>
-      </div><!-- End Doctor Profile -->
-      </div><!-- End Doctor Profile -->
-
+            }
     </div>
 
     <div class="text-center mt-5" data-aos="fade-up" data-aos-delay="700">
-      <a href="doctors.html" class="btn-view-all">
+      <a asp-controller="Doctors" asp-action="Index" class="btn-view-all">
         View All Doctors
         <i class="bi bi-arrow-right"></i>
       </a>

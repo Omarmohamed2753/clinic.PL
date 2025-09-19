@@ -75,5 +75,19 @@ namespace clinic.DAL.Repo.implementation
         {
             _context.Appointments.Update(appointment);
         }
+        public async Task<IEnumerable<Doctor>> GetAllDoctorsAsync()
+        {
+            return await _context.Doctors
+                                 .Include(d => d.Person)
+                                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Patient>> GetAllPatientsAsync()
+        {
+            return await _context.Patients
+                                 .Include(p => p.Person)
+                                 .ToListAsync();
+        }
+
     }
 }

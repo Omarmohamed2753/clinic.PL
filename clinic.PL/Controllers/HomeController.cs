@@ -1,32 +1,26 @@
-using System.Diagnostics;
-using clinic.PL.Models;
+using clinic.BLL.Service.abstraction;
 using Microsoft.AspNetCore.Mvc;
 
 namespace clinic.PL.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IDoctorService _doctorService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IDoctorService doctorService)
         {
-            _logger = logger;
+            _doctorService = doctorService;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var doctors = _doctorService.GetAllAsync(); // ??? ????? ?? ????????
+            return View(doctors.Result.doctors); // ??? ?? ?????? ???? ???? Compatible ?? ??? View
         }
 
         public IActionResult Privacy()
         {
             return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

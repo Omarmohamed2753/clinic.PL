@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using clinic.BLL.ModelVM.Appointment;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using clinic.PL.Models;
 using Microsoft.Extensions.Options;

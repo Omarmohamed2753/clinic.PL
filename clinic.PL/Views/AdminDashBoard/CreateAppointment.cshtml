@@ -1,0 +1,100 @@
+﻿@model clinic.BLL.ModelVM.Appointment.CreateAppointmentVM
+
+@{
+    ViewData["Title"] = "Create Appointment";
+    Layout = "~/Views/Shared/_AdminDashBoardLayout.cshtml";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <h4 class="page-title">Create Appointment</h4>
+
+        <form asp-action="CreateAppointment" method="post">
+            <div class="row">
+                <!-- Patient -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="PatientID" class="control-label">Patient</label>
+                        <select asp-for="PatientID" asp-items="Model.Patients" class="form-control">
+                            <option value="">-- Select Patient --</option>
+                        </select>
+                        <span asp-validation-for="PatientID" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Department -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="DepartmentId" class="control-label">Department</label>
+                        <select asp-for="DepartmentId" asp-items="Model.Departments" class="form-control" id="departmentDropdown">
+                            <option value="">-- Select Department --</option>
+                        </select>
+                        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Doctor -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="DoctorID" class="control-label">Doctor</label>
+                        <select asp-for="DoctorID" asp-items="Model.Doctors" class="form-control" id="doctorDropdown">
+                            <option value="">-- Select Doctor --</option>
+                        </select>
+                        <span asp-validation-for="DoctorID" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Appointment Date -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="AppointmentDate" class="control-label">Appointment Date</label>
+                        <input asp-for="AppointmentDate" type="datetime-local" class="form-control" />
+                        <span asp-validation-for="AppointmentDate" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Status -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Status" class="control-label">Status</label>
+                        <select asp-for="Status" class="form-control">
+                            <option value="0">Pending Payment</option>
+                            <option value="1">Scheduled</option>
+                            <option value="2">Completed</option>
+                            <option value="3">Cancelled</option>
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Create</button>
+                <a asp-action="AllAppointments" class="btn btn-secondary">Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+
+        <script>
+            $("#departmentDropdown").change(function () {
+                var departmentId = $(this).val();
+                if (departmentId) {
+                    $.getJSON('@Url.Action("GetDoctorsByDepartment", "AdminDashboard")', { departmentId: departmentId }, function (data) {
+                        var doctorDropdown = $("#doctorDropdown");
+                        doctorDropdown.empty();
+                        doctorDropdown.append($('<option>').text("-- Select Doctor --").attr('value', ""));
+                        $.each(data, function (i, doctor) {
+                            doctorDropdown.append($('<option>').text(doctor.name).attr('value', doctor.id));
+                        });
+                    });
+                }
+            });
+        </script>
+}

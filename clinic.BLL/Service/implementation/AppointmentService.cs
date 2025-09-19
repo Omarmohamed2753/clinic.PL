@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using clinic.BLL.ModelVM.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace clinic.BLL.Service.implementation
 {
@@ -158,5 +160,56 @@ namespace clinic.BLL.Service.implementation
         {
             return await _appointmentRepo.GetAllAsync();
         }
+        public async Task AddAppointmentFromAdminAsync(CreateAppointmentVM vm)
+        {
+            AppointmentStatus statusToSave = vm.Status switch
+            {
+                AppointmentStatus.Scheduled => AppointmentStatus.Scheduled,
+                AppointmentStatus.Completed => AppointmentStatus.Completed,
+                AppointmentStatus.Cancelled => AppointmentStatus.Cancelled,
+                AppointmentStatus.PendingPayment => AppointmentStatus.PendingPayment,
+                _ => AppointmentStatus.PendingPayment 
+            };
+
+            var appointment = new Appointment(0, vm.AppointmentDate, statusToSave)
+            {
+                DoctorID = vm.DoctorID,
+                PatientID = vm.PatientID
+            };
+
+            await _appointmentRepo.AddAsync(appointment);
+            await _appointmentRepo.SaveChangesAsync();
+
+        }
+        public async Task<IEnumerable<DropdownVM>> GetAllPatientsForDropdownAsync()
+        {
+            var patients = await _appointmentRepo.GetAllPatientsAsync();
+            return patients.Select(p => new DropdownVM
+            {
+                Id = p.Id,
+                Name = p.Person.FirstName + " " + p.Person.LastName
+            }).ToList();
+        }
+
+        public async Task<IEnumerable<DropdownVM>> GetAllDoctorsForDropdownAsync()
+        {
+            var doctors = await _appointmentRepo.GetAllDoctorsAsync();
+            return doctors.Select(d => new DropdownVM
+            {
+                Id = d.Id,
+                Name = "Dr. " + d.Person.FirstName + " " + d.Person.LastName
+            }).ToList();
+        }
+
+        public async Task<IEnumerable<DropdownVM>> GetAllDepartmentsForDropdownAsync()
+        {
+            var departments = await _appointmentRepo.GetAllDepartmentsAsync();
+            return departments.Select(dep => new DropdownVM
+            {
+                Id = dep.Id,
+                Name = dep.DepartmentName,
+            }).ToList();
+        }
+
     }
 }

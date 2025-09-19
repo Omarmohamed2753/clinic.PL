@@ -13,6 +13,7 @@ using clinic.DAL.DataBase;
 using clinic.BLL.Service.implementation;
 using clinic.BLL.ModelVM.User;
 using clinic.BLL.ModelVM.Department;
+using clinic.DAL.Enum;
 
 namespace clinic.PL.Controllers
 {
@@ -396,16 +397,25 @@ namespace clinic.PL.Controllers
                                 ? $"{a.Patient.Person.FirstName} {a.Patient.Person.LastName}"
                                 : "Unknown",
                 Age = a.Patient?.Person.Age,
-                    
-
 
                 DoctorName = a.Doctor?.Person != null
                                 ? $"Dr. {a.Doctor.Person.FirstName} {a.Doctor.Person.LastName}"
                                 : "Unknown",
                 Department = a.Doctor?.Department?.DepartmentName,
                 AppointmentDate = a.AppointmentDate,
-                Status = a.Status.ToString(),
-                PaymentStatus = a.PaymentIntentId != null ? "Paid" : "Pending",
+
+                Status = a.Status switch
+                {
+                    AppointmentStatus.PendingPayment => "Pending Payment",
+                    AppointmentStatus.Scheduled => "Scheduled",
+                    AppointmentStatus.Completed => "Completed",
+                    AppointmentStatus.Cancelled => "Cancelled",
+                    _=> "Unknown"
+                },
+
+
+                PaymentStatus = string.IsNullOrEmpty(a.PaymentIntentId) ? "Pending" : "Paid",
+
                 PatientImg = a.Patient?.imgPath ?? "~/assets/img/user.jpg"
 
             }).ToList();
@@ -413,5 +423,82 @@ namespace clinic.PL.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> CreateAppointment()
+        {
+            var departments = await _appointmentService.GetAllDepartmentsForDropdownAsync();
+            var patients = await _appointmentService.GetAllPatientsForDropdownAsync();
+            var doctors = await _appointmentService.GetAllDoctorsForDropdownAsync();
+
+            var vm = new CreateAppointmentVM
+            {
+                Departments = departments.Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = d.Name
+                }).ToList(),
+
+                Patients = patients.Select(p => new SelectListItem
+                {
+                    Value = p.Id.ToString(),
+                    Text = p.Name
+                }).ToList(),
+
+                Doctors = doctors.Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = d.Name
+                }).ToList(),
+            };
+
+            return View(vm);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateAppointment(CreateAppointmentVM vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                var departments = await _appointmentService.GetAllDepartmentsForDropdownAsync();
+                var patients = await _appointmentService.GetAllPatientsForDropdownAsync();
+                var doctors = await _appointmentService.GetAllDoctorsForDropdownAsync();
+
+                vm.Departments = departments.Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = d.Name
+                }).ToList();
+
+                vm.Patients = patients.Select(p => new SelectListItem
+                {
+                    Value = p.Id.ToString(),
+                    Text = p.Name
+                }).ToList();
+
+                vm.Doctors = doctors.Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = d.Name
+                }).ToList();
+
+                return View(vm);
+            }
+
+            await _appointmentService.AddAppointmentFromAdminAsync(vm);
+            return RedirectToAction("AllAppointments", "AdminDashBoard");
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetDoctorsByDepartment(int departmentId)
+        {
+            var doctors = await _appointmentService.GetDoctorsByDepartmentAsync(departmentId);
+            var result = doctors.Select(d => new
+            {
+                id = d.Id,
+                name = "Dr. " + d.Person.FirstName + " " + d.Person.LastName
+            });
+            return Json(result);
+        }
+
     }
+
 }
+

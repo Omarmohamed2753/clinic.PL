@@ -1,0 +1,50 @@
+﻿
+
+
+@model IEnumerable<clinic.BLL.ModelVM.Doctor.GetAllDoctorVM>
+
+@{
+    Layout = "~/Views/Shared/_DoctorLayout.cshtml";
+    ViewData["Title"] = "Doctors";
+}
+
+
+
+<section id="doctors" class="doctors section">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row gy-4">
+            @foreach (var doctor in Model)
+            {
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+              <div class="doctor-card">
+                <div class="doctor-image">
+                  <img src="~/files/@doctor.DoctorImgUrl" alt="Dr. @doctor.Name" class="img-fluid">
+                  <div class="doctor-overlay">
+                    <div class="social-links">
+                      <a href="#"><i class="bi bi-linkedin"></i></a>
+                      <a href="#"><i class="bi bi-envelope"></i></a>
+                      <a href="#"><i class="bi bi-phone"></i></a>
+                    </div>
+                  </div>
+                </div>
+                <div class="doctor-content">
+                  <h4>Dr. @doctor.Name</h4>
+                  <span class="specialty">@doctor.Specialization</span>
+                  <div class="doctor-meta">
+                    <div class="experience">
+                      <i class="bi bi-award"></i>
+                      <span>@doctor.YearsOfExperience+ Years Experience</span>
+                    </div>
+                    <div class="department">
+                      <i class="bi bi-building"></i>
+                      <span>@doctor.Specialization Dept.</span>
+                    </div>
+                  </div>
+                      <a asp-controller="Appointment" asp-action="Create" asp-route-doctorId="@doctor.Id" class="btn-appointment">Book Appointment</a>
+                </div>
+              </div>
+            </div>
+            }
+    </div>
+  </div>
+</section>

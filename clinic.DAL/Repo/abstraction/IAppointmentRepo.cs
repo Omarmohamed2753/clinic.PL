@@ -21,5 +21,8 @@ namespace clinic.DAL.Repo.abstraction
         Task<Appointment> GetAppointmentBySessionIdAsync(string sessionId);
 
         void UpdateAppointment(Appointment appointment);
+        Task<IEnumerable<Doctor>> GetAllDoctorsAsync();
+        Task<IEnumerable<Patient>> GetAllPatientsAsync();
+
     }
 }

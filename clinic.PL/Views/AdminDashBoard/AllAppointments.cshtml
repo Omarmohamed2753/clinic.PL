@@ -45,9 +45,25 @@
                                     <td>@appointment.Department</td>
                                     <td>@appointment.AppointmentDate.ToString("dd MMM yyyy")</td>
                                     <td>
-                                        <span class="custom-badge @(appointment.Status == "Scheduled" ? "status-green" : "status-red")">
-                                        @appointment.Status
-                                        </span>
+                                       <td>
+                                        @if (appointment.Status == "Scheduled")
+                                        {
+                                             <span class="custom-badge status-green">Scheduled</span>
+                                        }
+                                        else if (appointment.Status == "Completed")
+                                        {
+                                            <span class="custom-badge status-blue">Completed</span>
+                                        }
+                                        else if (appointment.Status == "Cancelled")
+                                        {
+                                             <span class="custom-badge status-red">Cancelled</span>
+                                        }
+                                        else
+                                        {
+                                             <span class="custom-badge status-grey">@appointment.Status</span>
+                                        }
+                                     </td>
+
                                     </td>
                                     <td class="text-right">
                                         <div class="dropdown dropdown-action">

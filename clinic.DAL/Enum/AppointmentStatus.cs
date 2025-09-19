@@ -8,9 +8,9 @@ namespace clinic.DAL.Enum
 {
     public enum AppointmentStatus
     {
-        Scheduled,
-        Cancelled,
-        Completed,
-        PendingPayment
+        PendingPayment = 0,
+        Scheduled = 1,
+        Completed = 2,
+        Cancelled = 3
     }
 }

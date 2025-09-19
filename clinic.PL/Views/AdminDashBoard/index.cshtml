@@ -81,7 +81,7 @@
         <div class="card">
             <div class="card-header">
                 <h4 class="card-title d-inline-block">Upcoming Appointments</h4> 
-                <a href="@Url.Action("Appointments","AdminDashboard")" class="btn btn-primary float-right">View all</a>
+                <a href="@Url.Action("AllAppointments","AdminDashboard")" class="btn btn-primary float-right">View all</a>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -103,7 +103,7 @@
                                         <p>@appointment.AppointmentDate.ToString("hh:mm tt")</p>
                                     </td>
                                     <td class="text-right">
-                                        <a href="@Url.Action("Appointments","AdminDashboard")" class="btn btn-outline-primary take-btn">Take up</a>
+                                        <a href="@Url.Action("AllAppointments","AdminDashboard")" class="btn btn-outline-primary take-btn">Take up</a>
                                     </td>
                                 </tr>
                             }
