@@ -1,0 +1,96 @@
+﻿@using clinic.BLL.ModelVM.Patient
+@{
+    Layout = "~/Views/Shared/_AdminDashBoardLayout.cshtml";
+    ViewData["Title"] = "Get All Patients";
+}
+@model List<IndexPatientVM>
+
+<div class="content">
+    <div class="row">
+        <div class="col-sm-4 col-3">
+            <h4 class="page-title">Patients</h4>
+        </div>
+        <div class="col-sm-8 col-9 text-right m-b-20">
+            <a asp-action="CreatePatient" asp-controller="AdminDashBoard" class="btn btn btn-primary btn-rounded float-right">
+                <i class="fa fa-plus"></i> Add Patient
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-border table-striped custom-table datatable mb-0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>BloodType</th>
+                            <th>Address</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th class="text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model == null || !Model.Any())
+                        {
+                                <tr>
+                                    <td colspan="6" class="text-danger text-center">There are no patients</td>
+                                </tr>
+                        }
+                        else
+                        {
+                            foreach (var result in Model)
+                            {
+                                        <tr>
+                                            <td>
+                                                <img width="28" height="28" src="assets/img/user.jpg" class="rounded-circle m-r-5" alt="">@result.FullName
+                                            </td>
+                                            <td>@result.BloodType</td>
+                                            <td>@result.Address</td>
+                                            <td>@result.Phone</td>
+                                            <td>@result.Email</td>
+                                            <td class="text-right">
+                                                <div class="dropdown dropdown-action">
+                                                    <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <a class="dropdown-item" asp-action="EditPatient" asp-controller="AdminDashBoard" asp-route-id="@result.Id">
+                                                            <i class="fa fa-pencil m-r-5"></i> Edit
+                                                        </a>
+                                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#deletePatientModal-@result.Id">
+                                                            <i class="fa fa-trash-o m-r-5"></i> Delete
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <!-- Delete Modal -->
+                                        <div class="modal fade" id="deletePatientModal-@result.Id" tabindex="-1" role="dialog" aria-labelledby="deletePatientLabel-@result.Id" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deletePatientLabel-@result.Id">Confirm Delete</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to delete <b>@result.FullName</b>?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <form asp-action="DeletePatient" asp-controller="AdminDashBoard" asp-route-id="@result.Id" method="post">
+                                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                                        </form>
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

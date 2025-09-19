@@ -1,0 +1,121 @@
+﻿@{
+    // This command disables the main layout, making the page standalone.
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment Failed</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
+    <style>
+        /* Custom styles consistent with the success page, but themed for failure/warning */
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .status-card {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .status-icon {
+            font-size: 50px;
+            color: #dc3545; /* Red for failure */
+            background-color: #fbe9eb;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            animation: popIn 0.5s ease-in-out 0.2s;
+            transform: scale(0);
+            animation-fill-mode: forwards;
+        }
+
+        .status-card h1 {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .status-card p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .status-card .btn-danger { /* Using .btn-danger for the action button */
+            border-radius: 50px;
+            padding: 12px 35px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+            .status-card .btn-danger:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+            }
+
+        /* Keyframe animations for a dynamic feel */
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@keyframes popIn {
+            from {
+                transform: scale(0);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="status-card">
+        <div class="status-icon">
+            <i class="fas fa-times"></i>
+        </div>
+        <h1>Payment Failed</h1>
+        <p>
+            Unfortunately, we were unable to process your payment. Your appointment has not been scheduled.
+            Please check your payment details and try again.
+        </p>
+        <a asp-action="Create" asp-controller="Appointment" class="btn btn-danger">Try Again</a>
+    </div>
+
+</body>
+</html>

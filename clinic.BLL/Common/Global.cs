@@ -1,0 +1,9 @@
+﻿global using clinic.BLL.Service.abstraction;
+global using Microsoft.AspNetCore.Http;
+global using AutoMapper;
+global using clinic.BLL.Helper;
+global using clinic.BLL.ModelVM.Department;
+global using clinic.DAL.Entities;
+global using clinic.DAL.Repo.abstraction;
+global using clinic.BLL.ModelVM.Doctor;
+global using clinic.BLL.ModelVM.Patient;

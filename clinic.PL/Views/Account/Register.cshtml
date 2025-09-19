@@ -1,0 +1,46 @@
+﻿@using clinic.BLL.ModelVM.AccountVM
+@model SignUpVM
+
+
+@{
+    Layout = "~/Views/Shared/_SignUpLayout.cshtml";
+    ViewData["Title"] = "SignUp";
+}
+
+
+<div class="registration-form">
+        <div class="form-header">
+            <h2>Create Your Account</h2>
+            <p>Sign up to get started!</p>
+        </div>
+        <form asp-action="Register" asp-controller="Account">
+            <div class="mb-3">
+                <label for="username" class="form-label">UserName</label>
+                <input type="text" asp-for="UserName" class="form-control" id="username" placeholder="Enter your username">
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" asp-for="Email" class="form-control" id="email" placeholder="Enter your email">
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" asp-for="Password" class="form-control" id="password" placeholder="Create a password">
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="confirm-password" class="form-label">Confirm Password</label>
+                <input type="password" asp-for="ConfirmPassword" class="form-control" id="confirm-password" placeholder="Confirm your password">
+				<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="terms">
+                <label class="form-check-label" for="terms">I agree to the <a href="#" class="text-primary">terms and conditions</a></label>
+            </div>
+            <button type="submit" class="btn btn-custom w-100">SignUp</button>
+        </form>
+        <div class="text-muted">
+            Already have an account? <a href="#" class="text-primary">Sign In</a>
+        </div>
+   </div>

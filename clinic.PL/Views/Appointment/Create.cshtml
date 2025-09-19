@@ -1,0 +1,570 @@
+﻿@model clinic.BLL.ModelVM.Appointment.AppointmentVM
+
+@{
+
+	Layout = "~/Views/Shared/_NewLayout.cshtml";
+
+	ViewData["Title"] = "Book an Appointment";
+
+}
+
+
+
+
+
+<style>
+
+		.step-container {
+				display: none;
+
+	}
+
+
+
+			.step-container.active {
+					display: block;
+
+	}
+
+
+
+		.step-progress {
+				display: flex;
+				justify-content: space-between;
+				margin-bottom: 30px;
+				position: relative;
+
+	}
+
+
+
+			.step-progress::before {
+					content: '';
+					position: absolute;
+					top: 50%;
+					left: 0;
+					width: 100%;
+					height: 4px;
+					background-color: #e9ecef;
+					z-index: 1;
+
+	}
+
+
+
+			.step-progress .step {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					position: relative;
+					z-index: 2;
+					background-color: #fff;
+					padding: 0 10px;
+
+	}
+
+
+
+		.step .step-icon {
+				width: 40px;
+				height: 40px;
+				border-radius: 50%;
+				background-color: #e9ecef;
+				color: #6c757d;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-weight: bold;
+				transition: background-color 0.3s, color 0.3s;
+				border: 2px solid #e9ecef;
+
+	}
+
+
+
+		.step.active .step-icon {
+				background-color: #0d6efd;
+				color: #fff;
+				border-color: #0d6efd;
+
+	}
+
+
+
+		.step.completed .step-icon {
+				background-color: #198754;
+				color: #fff;
+				border-color: #198754;
+
+	}
+
+
+
+		.step .step-label {
+				margin-top: 10px;
+				font-size: 14px;
+				color: #6c757d;
+
+	}
+
+
+
+		.step.active .step-label {
+				color: #0d6efd;
+				font-weight: bold;
+
+	}
+
+
+
+		.step.completed .step-label {
+				color: #198754;
+
+	}
+
+
+
+		.form-buttons {
+				display: flex;
+				justify-content: space-between;
+				margin-top: 30px;
+
+	}
+
+
+
+		.btn-next, .btn-prev {
+				padding: 10px 30px;
+
+	}
+
+
+
+		.form-control, .form-select {
+				height: 50px;
+
+	}
+</style>
+
+
+
+<div class="page-title" data-aos="fade">
+
+	<div class="container">
+
+		<nav class="breadcrumbs">
+
+			<ol>
+
+				<li><a asp-controller="Home" asp-action="Index">Home</a></li>
+
+				<li class="current">Make an Appointment</li>
+
+			</ol>
+
+		</nav>
+
+		<h1>Make an Appointment</h1>
+
+	</div>
+
+</div>
+
+
+
+<main id="main">
+	<section id="appointment" class="appointment section-bg d-flex align-items-center">
+
+		<div class="container" data-aos="fade-up">
+
+
+
+			<div class="row justify-content-center">
+
+				<div class="col-lg-10">
+
+
+
+					<form asp-controller="Appointment" asp-action="Create" method="post" role="form" class="php-email-form">
+
+						@Html.AntiForgeryToken()
+
+						<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+
+
+						
+
+						<div class="step-progress">
+
+							<div class="step active" data-step="1">
+
+								<div class="step-icon">1</div>
+
+								<div class="step-label">Personal Info</div>
+
+							</div>
+
+							<div class="step" data-step="2">
+
+								<div class="step-icon">2</div>
+
+								<div class="step-label">Appointment Details</div>
+
+							</div>
+
+							<div class="step" data-step="3">
+
+								<div class="step-icon">3</div>
+
+								<div class="step-label">Confirmation</div>
+
+							</div>
+
+						</div>
+
+
+
+						
+
+						<div class="step-container active" data-step="1">
+
+							<div class="section-title">
+
+								<h2>Step 1: Your Personal Details</h2>
+
+							</div>
+
+							<div class="row">
+
+								<div class="col-md-6 form-group">
+
+									<label asp-for="FirstName" class="form-label"></label>
+
+									<input asp-for="FirstName" class="form-control" placeholder="Your First Name" />
+
+									<span asp-validation-for="FirstName" class="text-danger"></span>
+
+								</div>
+
+								<div class="col-md-6 form-group mt-3 mt-md-0">
+
+									<label asp-for="LastName" class="form-label"></label>
+
+									<input asp-for="LastName" class="form-control" placeholder="Your Last Name" />
+
+									<span asp-validation-for="LastName" class="text-danger"></span>
+
+								</div>
+
+							</div>
+
+							<div class="row">
+
+								<div class="col-md-6 form-group mt-3">
+
+									<label asp-for="Email" class="form-label"></label>
+
+									<input asp-for="Email" class="form-control" placeholder="Your Email" />
+
+									<span asp-validation-for="Email" class="text-danger"></span>
+
+								</div>
+
+								<div class="col-md-6 form-group mt-3">
+
+									<label asp-for="Phone" class="form-label"></label>
+
+									<input asp-for="Phone" class="form-control" placeholder="Your Phone Number" />
+
+									<span asp-validation-for="Phone" class="text-danger"></span>
+
+								</div>
+								<div class="col-md-6 form-group mt-3">
+
+									<label asp-for="Address" class="form-label"></label>
+
+									<input asp-for="Address" class="form-control" placeholder="Your Address" />
+
+									<span asp-validation-for="Address" class="text-danger"></span>
+
+								</div>
+								<div class="col-md-6 form-group mt-3">
+
+									<label asp-for="Allergies" class="form-label"></label>
+
+									<input asp-for="Allergies" class="form-control" placeholder="Your Allergies" />
+
+									<span asp-validation-for="Allergies" class="text-danger"></span>
+
+								</div>
+								<div class="col-md-6 form-group mt-3">
+
+									<label asp-for="BloodType" class="form-label"></label>
+
+									<input asp-for="BloodType" class="form-control" placeholder="Your BloodType" />
+
+									<span asp-validation-for="BloodType" class="text-danger"></span>
+
+								</div>
+								<div class="col-md-6 form-group mt-3">
+
+									<label asp-for="EmergencyContactPhone" class="form-label"></label>
+
+									<input asp-for="EmergencyContactPhone" class="form-control" placeholder="Your Emergency Contact Phone" />
+
+									<span asp-validation-for="EmergencyContactPhone" class="text-danger"></span>
+
+								</div>
+								<div class="col-md-6 form-group mt-3">
+
+									<label asp-for="MedicalHistory" class="form-label"></label>
+
+									<input asp-for="MedicalHistory" class="form-control" placeholder="Your Medical History" />
+
+									<span asp-validation-for="MedicalHistory" class="text-danger"></span>
+
+								</div>
+								<div class="col-md-6 form-group mt-3">
+
+									<label asp-for="Age" class="form-label"></label>
+
+									<input asp-for="Age" type="number" class="form-control" placeholder="Your Age" />
+
+									<span asp-validation-for="Age" class="text-danger"></span>
+
+								</div>
+
+							</div>
+
+						</div>
+
+
+
+						
+
+						<div class="step-container" data-step="2">
+
+							<div class="section-title">
+
+								<h2>Step 2: Choose Your Specialist</h2>
+
+							</div>
+
+							<div class="row">
+
+								<div class="col-md-4 form-group mt-3">
+
+									<label asp-for="DepartmentID" class="form-label"></label>
+
+									<select asp-for="DepartmentID" asp-items="@Model.Departments" class="form-select">
+
+										<option value="">Select Department</option>
+
+									</select>
+
+									<span asp-validation-for="DepartmentID" class="text-danger"></span>
+
+								</div>
+
+								<div class="col-md-4 form-group mt-3">
+
+									<label asp-for="DoctorID" class="form-label"></label>
+
+									<select asp-for="DoctorID" class="form-select">
+
+										<option value="">Select Doctor</option>
+
+									</select>
+
+									<span asp-validation-for="DoctorID" class="text-danger"></span>
+
+								</div>
+
+								<div class="col-md-4 form-group mt-3">
+
+									<label asp-for="AppointmentDate" class="form-label"></label>
+
+									<input asp-for="AppointmentDate" class="form-control" type="date" />
+
+									<span asp-validation-for="AppointmentDate" class="text-danger"></span>
+
+								</div>
+
+							</div>
+
+							<div class="form-group mt-3">
+
+								<label asp-for="Message" class="form-label">Message (Optional)</label>
+
+								<textarea asp-for="Message" class="form-control" rows="5" placeholder="Please describe your symptoms or reason for visit"></textarea>
+
+							</div>
+
+						</div>
+
+
+
+						
+
+						<div class="step-container" data-step="3">
+
+							<div class="section-title">
+
+								<h2>Step 3: Confirm Your Details</h2>
+
+								<p>Please review your information below before submitting.</p>
+
+							</div>
+
+							<div id="confirmation-details" class="alert alert-info">
+
+								
+
+							</div>
+
+							<div class="text-center mt-4">
+
+								<button type="submit" class="btn btn-primary btn-lg">Confirm & Pay </button>
+								
+
+							</div>
+
+						</div>
+
+
+
+					
+
+						<div class="form-buttons">
+
+							<button type="button" class="btn btn-secondary btn-prev" style="display: none;">Previous</button>
+
+							<button type="button" class="btn btn-primary btn-next">Next</button>
+
+						</div>
+
+					</form>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</section>
+
+</main>
+
+
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+	<script>
+		$(document).ready(function () {
+
+			// --- THIS IS THE CRUCIAL FIX ---
+			// Tell jQuery Validate to ignore hidden inputs, which is essential for multi-step forms.
+			$.validator.setDefaults({
+				ignore: ":hidden"
+			});
+
+			let currentStep = 1;
+			const totalSteps = 3;
+
+			function updateButtons() {
+				if (currentStep === 1) {
+					$('.btn-prev').hide();
+				} else {
+					$('.btn-prev').show();
+				}
+
+				if (currentStep === totalSteps) {
+					$('.btn-next').hide();
+				} else {
+					$('.btn-next').show();
+				}
+			}
+
+			function goToStep(step) {
+				$('.step-container').removeClass('active');
+				$(`.step-container[data-step="${step}"]`).addClass('active');
+
+				$('.step').removeClass('active completed');
+				for (let i = 1; i < step; i++) {
+					$(`.step[data-step="${i}"]`).addClass('completed');
+				}
+				$(`.step[data-step="${step}"]`).addClass('active');
+
+				currentStep = step;
+				updateButtons();
+			}
+
+			$('.btn-next').on('click', function () {
+				var form = $(this).closest('form');
+				var currentStepContainer = $(`.step-container[data-step="${currentStep}"]`);
+
+				// Re-parse to ensure the validator is aware of the form state
+				form.removeData('validator');
+				form.removeData('unobtrusiveValidation');
+				$.validator.unobtrusive.parse(form);
+
+				var isValid = true;
+				currentStepContainer.find('input, select, textarea').each(function () {
+					if (!$(this).valid()) {
+						isValid = false;
+					}
+				});
+
+				if (isValid && currentStep < totalSteps) {
+					goToStep(currentStep + 1);
+
+					if (currentStep === totalSteps) {
+						$('#confirmation-details').html(
+							`<strong>Name:</strong> ${$('#FirstName').val()} ${$('#LastName').val()}<br>` +
+							`<strong>Email:</strong> ${$('#Email').val()}<br>` +
+							`<strong>Phone:</strong> ${$('#Phone').val()}<br>` +
+							`<strong>Department:</strong> ${$('#DepartmentID option:selected').text()}<br>` +
+							`<strong>Doctor:</strong> ${$('#DoctorID option:selected').text()}<br>` +
+							`<strong>Date:</strong> ${$('#AppointmentDate').val()}`
+						);
+					}
+				}
+			});
+
+			$('.btn-prev').on('click', function () {
+				if (currentStep > 1) {
+					goToStep(currentStep - 1);
+				}
+			});
+
+			$('#DepartmentID').on('change', function () {
+				var departmentId = $(this).val();
+				var doctorDropdown = $('#DoctorID');
+				doctorDropdown.empty().append('<option value="">Loading...</option>');
+
+				if (departmentId) {
+					$.ajax({
+						url: '@Url.Action("GetDoctorsByDepartment", "Appointment")',
+						type: 'GET',
+						data: { departmentId: departmentId },
+						success: function (data) {
+							doctorDropdown.empty().append('<option value="">Select Doctor</option>');
+							$.each(data, function (index, doctor) {
+								doctorDropdown.append($('<option>', {
+									value: doctor.id,
+									text: doctor.name
+								}));
+							});
+						},
+						error: function () {
+							doctorDropdown.empty().append('<option value="">Error Loading Doctors</option>');
+						}
+					});
+				} else {
+					doctorDropdown.empty().append('<option value="">Select Department First</option>');
+				}
+			});
+		});
+	</script>
+}

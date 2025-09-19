@@ -1,0 +1,181 @@
+﻿@model clinic.BLL.ModelVM.Patient.EditPatientVM
+
+@{
+    Layout = "~/Views/Shared/_AdminDashBoardLayout.cshtml";
+    ViewData["Title"] = "Edit patient";
+}
+
+<div class="content">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <h4 class="page-title">Edit Patient</h4>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+           <form id="editPatientForm" asp-action="EditPatient" asp-controller="AdminDashboard" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <input asp-for="Id" type="hidden" />
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="FirstName">First Name <span class="text-danger">*</span></label>
+                            <input asp-for="FirstName" class="form-control" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="LastName">Last Name</label>
+                            <input asp-for="LastName" class="form-control" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="User.UserName">Username <span class="text-danger">*</span></label>
+                            <input asp-for="User.UserName" class="form-control" />
+                            <span asp-validation-for="User.UserName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="User.Email">Email <span class="text-danger">*</span></label>
+                            <input asp-for="User.Email" class="form-control" />
+                            <span asp-validation-for="User.Email" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="BirthDate">Date of Birth</label>
+                            <input asp-for="BirthDate" type="date" class="form-control" />
+                            <span asp-validation-for="BirthDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="Phone">Phone</label>
+                            <input asp-for="Phone" class="form-control" />
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label asp-for="Address">Address</label>
+                            <input asp-for="Address" class="form-control" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="Age">Age</label>
+                            <input asp-for="Age" type="number" class="form-control" />
+                            <span asp-validation-for="Age" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="BloodType">Blood Type</label>
+                            <input asp-for="BloodType" class="form-control" type="text" />
+                            <span asp-validation-for="BloodType" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="Allergies">Allergies</label>
+                            <input asp-for="Allergies" type="text" class="form-control" />
+                            <span asp-validation-for="Allergies" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="EmergencyContactPhone">Emergency Contact Phone</label>
+                            <input asp-for="EmergencyContactPhone" class="form-control" />
+                            <span asp-validation-for="EmergencyContactPhone" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Avatar / Image -->
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Your avatar:</label>
+                            <div class="profile-upload d-flex align-items-center">
+                                <div class="upload-img mr-3">
+                                    @if (!string.IsNullOrEmpty(Model.ExistingImgPath))
+                                    {
+                                                <img alt="avatar" src="~/files/@Model.ExistingImgPath" class="rounded-circle" style="width:80px; height:80px; object-fit:cover;" />
+                                    }
+                                    else
+                                    {
+                                                <img alt="avatar" src="~/files/default-doctor.png" class="rounded-circle" style="width:80px; height:80px; object-fit:cover;" />
+                                    }
+                                </div>
+                                <div class="upload-input" style="flex:1">
+                                    <input asp-for="PatientImg" type="file" class="form-control" />
+                                    <span asp-validation-for="PatientImg" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User password -->
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="User.Password">Password</label>
+                            <input asp-for="User.Password" type="password" class="form-control" />
+                            <span asp-validation-for="User.Password" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="User.ConfirmPassword">Confirm Password</label>
+                            <input asp-for="User.ConfirmPassword" type="password" class="form-control" />
+                            <span asp-validation-for="User.ConfirmPassword" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="m-t-20 text-center">
+                    <button type="submit" class="btn btn-primary submit-btn">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $("#editPatientForm").submit(function (e) {
+        e.preventDefault();
+
+        var formData = new FormData(this);
+
+        $.ajax({
+            type: "POST",
+            url: "/AdminDashboard/EditPatient", 
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    window.location.href = response.redirectUrl;
+                } else {
+                    console.log(response.errors || response.error);
+                }
+            }
+        });
+    });
+</script>
